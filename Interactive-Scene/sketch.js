@@ -5,17 +5,95 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
+let r;
+let g;
+let b;
+let a;
+let xPosistion;
+let yPosistion;
+let x;
+let y;
+let dx = 5;
+let dy = 5;
+let movingUp = false;
+let movingDown = false;
+let movingLeft = false;
+let movingRight = false;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  r = random(0, 255);
+  g = random(0, 255);
+  b = random(0, 255);
+  a = random(0, 255);
+  xPosistion = random(0, windowWidth);
+  yPosistion = random(0, windowHeight);
+  x = width/2;
+  y = height/2;
 }
 
 function draw() {
   background(220);
-  let r = random(0, 255);
-  let g = random(0, 255);
-  let b = random(0, 255);
-  let a = random(0, 255);
+  createBall();
+  moveBall();
+  placeCoins();
+}
+
+function createBall() {
   fill(r, g, b, a);
-  ellipse(mouseX, mouseY, 50, [50]);
+  ellipse(x, y, 30, [30]);
+}
+
+// Making  the ball move with WASD keys 
+function moveBall() {
+  if (movingUp) {
+    y -= dy;
+  }
+  if (movingLeft) {
+    x -= dx;
+  }
+  if (movingDown) {
+    y += dy;
+  }
+  if (movingRight) {
+    x += dx;
+  }
+}
+
+function keyPressed() {
+  if (key === "w") {
+    movingUp = true;
+  }
+  if (key === "a") {
+    movingLeft = true;
+  }
+  if (key === "s") {
+    movingDown = true;
+  }
+  if (key === "d") {
+    movingRight = true;
+  }
+}
+
+function keyReleased() {
+  if (key === "w") {
+    movingUp = false;
+  }
+  if (key === "a") {
+    movingLeft = false;
+  }
+  if (key === "s") {
+    movingDown = false;
+  }
+  if (key === "d") {
+    movingRight = false;
+  }
+}
+
+// Creating coins for players to collect
+function placeCoins() {
+  for(let coins = 0; coins < 40; coins++) {
+    fill("gold");
+    ellipse(xPosistion, yPosistion, 10, 10);
+  }
 }
