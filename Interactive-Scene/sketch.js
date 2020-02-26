@@ -9,8 +9,6 @@ let r;
 let g;
 let b;
 let a;
-let xPosistion;
-let yPosistion;
 let x;
 let y;
 let dx = 5;
@@ -26,17 +24,15 @@ function setup() {
   g = random(0, 255);
   b = random(0, 255);
   a = random(0, 255);
-  xPosistion = random(0, windowWidth);
-  yPosistion = random(0, windowHeight);
   x = width/2;
   y = height/2;
+  background(220);
+  placeCoins();
 }
 
-function draw() {
-  background(220);
+function draw() { 
   createBall();
   moveBall();
-  placeCoins();
 }
 
 function createBall() {
@@ -93,7 +89,10 @@ function keyReleased() {
 // Creating coins for players to collect
 function placeCoins() {
   for(let coins = 0; coins < 40; coins++) {
+    let   xPosistion = random(windowWidth, 0);
+    let yPosistion = random(0, windowHeight);
     fill("gold");
     ellipse(xPosistion, yPosistion, 10, 10);
+
   }
 }
