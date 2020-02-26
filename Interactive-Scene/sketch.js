@@ -9,8 +9,10 @@ let r;
 let g;
 let b;
 let a;
-let x;
-let y;
+let coinX;
+let coinY;
+let ballX;
+let ballY;
 let dx = 5;
 let dy = 5;
 let movingUp = false;
@@ -24,35 +26,43 @@ function setup() {
   g = random(0, 255);
   b = random(0, 255);
   a = random(0, 255);
-  x = width/2;
-  y = height/2;
-  background(220);
-  placeCoins();
+  ballX = width/2;
+  ballY = height/2;
 }
 
 function draw() { 
+  background(220);
+  placeCoins();
   createBall();
   moveBall();
+  collectCoin();
 }
 
 function createBall() {
   fill(r, g, b, a);
-  ellipse(x, y, 30, [30]);
+  ellipse(ballX, ballY, 30, [30]);
+}
+
+function collectCoin() {
+  if(ballX - coinX <= 10 && ballY - coinY <= 10) {
+    point ++;
+    print(point);
+  }
 }
 
 // Making  the ball move with WASD keys 
 function moveBall() {
   if (movingUp) {
-    y -= dy;
+    ballY -= dy;
   }
   if (movingLeft) {
-    x -= dx;
+    ballX -= dx;
   }
   if (movingDown) {
-    y += dy;
+    ballY += dy;
   }
   if (movingRight) {
-    x += dx;
+    ballX += dx;
   }
 }
 
@@ -89,10 +99,9 @@ function keyReleased() {
 // Creating coins for players to collect
 function placeCoins() {
   for(let coins = 0; coins < 40; coins++) {
-    let   xPosistion = random(windowWidth, 0);
-    let yPosistion = random(0, windowHeight);
+    coinX = random(windowWidth, 0);
+    coinY = random(0, windowHeight);
     fill("gold");
-    ellipse(xPosistion, yPosistion, 10, 10);
-
+    ellipse(coinX, coinY, 10, 10);
   }
 }
