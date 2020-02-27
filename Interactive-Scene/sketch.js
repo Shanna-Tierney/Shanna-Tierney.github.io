@@ -9,8 +9,12 @@ let r;
 let g;
 let b;
 let a;
-let coinX;
-let coinY;
+let coin1X;
+let coin1Y;
+let coin2X;
+let coin2Y;
+let coin3X;
+let coin3Y;
 let ballX;
 let ballY;
 let dx = 5;
@@ -28,11 +32,12 @@ function setup() {
   a = random(0, 255);
   ballX = width/2;
   ballY = height/2;
+  background(255);
+  placeCoins();
 }
 
 function draw() { 
-  background(220);
-  placeCoins();
+
   createBall();
   moveBall();
   collectCoin();
@@ -43,8 +48,30 @@ function createBall() {
   ellipse(ballX, ballY, 30, [30]);
 }
 
+// Creating coins for players to collect
+function placeCoins() {
+  coin1X = random(windowWidth, 0);
+  coin1Y = random(0, windowHeight);
+  fill("gold");
+  ellipse(coin1X, coin1Y, 10, 10);
+  coin2X = random(windowWidth, 0);
+  coin2Y = random(0, windowHeight);
+  fill("gold");
+  ellipse(coin2X, coin2Y, 10, 10);
+  coin3X = random(windowWidth, 0);
+  coin3Y = random(0, windowHeight);
+  fill("gold");
+  ellipse(coin3X, coin3Y, 10, 10);
+
+}
+
+function createObstacals() {
+
+}
+
 function collectCoin() {
-  if(ballX - coinX <= 10 && ballY - coinY <= 10) {
+  if(ballX - coinX <= 5 && ballY - coinY <= 5) {
+    let point;
     point ++;
     print(point);
   }
@@ -93,15 +120,5 @@ function keyReleased() {
   }
   if (key === "d") {
     movingRight = false;
-  }
-}
-
-// Creating coins for players to collect
-function placeCoins() {
-  for(let coins = 0; coins < 40; coins++) {
-    coinX = random(windowWidth, 0);
-    coinY = random(0, windowHeight);
-    fill("gold");
-    ellipse(coinX, coinY, 10, 10);
   }
 }
