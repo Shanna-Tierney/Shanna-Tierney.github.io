@@ -18,6 +18,7 @@ let coin2X;
 let coin2Y;
 let coin3X;
 let coin3Y;
+let ball;
 let ballX;
 let ballY;
 let dx = 5;
@@ -27,7 +28,6 @@ let movingDown = false;
 let movingLeft = false;
 let movingRight = false;
 let points = 0;
-let writer;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -43,7 +43,6 @@ function setup() {
   coin3Y =  random(0, windowHeight);
   ballX = width/2;
   ballY = height/2;
-  writer = createWriter("newFile.txt");
 }
 
 function draw() { 
@@ -51,18 +50,23 @@ function draw() {
   placeCoins();
   createBall();
   moveBall();
-  youWin();
 }
+
 
 function createBall() {
   fill(r, g, b, a);
-  ellipse(ballX, ballY, 30, [30]);
+  ball = ellipse(ballX, ballY, 30, [30]);
 }
 
 // Creating coins for players to collect
 function placeCoins() {
-  fill("gold");
-  coin1 = ellipse(coin1X, coin1Y, 10, 10);
+  if(ballX - coin1X < 5 && ballY - coin1Y < 5) {
+    // got coin true? ++
+  }
+  else{
+    fill("gold");
+    coin1 = ellipse(coin1X, coin1Y, 10, 10);
+  }
   fill("gold");
   coin2 = ellipse(coin2X, coin2Y, 10, 10);
   fill("gold");
@@ -73,26 +77,17 @@ function createObstacals() {
 
 }
 
-function collectCoin1() {
-  if(ballX - coin1X < 5 && ballY - coin1Y < 5)
-}
+// function collectCoin1() {
+//   if(ballX - coin1X < 5 && ballY - coin1Y < 5) {
 
-function youWin() {
-  if(points === 3) {
-    writer.write(["YOU WIN, CONGRATS!"]);
-    document.location.reload();
-    writer.close();
-  }
-}
-
+//   }
+// }
 
 function collectCoin() {
   if(ballX - coin1X <= 5 && ballY - coin1Y <= 5){
     print(points);
     return points ++;
   }
-
-
 }
 
 // Making  the ball move with WASD keys 
