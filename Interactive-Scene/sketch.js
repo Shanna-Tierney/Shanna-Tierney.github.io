@@ -18,9 +18,9 @@ let coin2X;
 let coin2Y;
 let coin3X;
 let coin3Y;
-let ball;
-let ballX;
-let ballY;
+let player;
+let playerX;
+let playerY;
 let dx = 5;
 let dy = 5;
 let movingUp = false;
@@ -28,6 +28,9 @@ let movingDown = false;
 let movingLeft = false;
 let movingRight = false;
 let points = 0;
+let touchedCoin1 = false;
+let touchedCoin2 = false;
+let touchedCoin3 = false;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -41,68 +44,89 @@ function setup() {
   coin2Y =  random(0, windowHeight);
   coin3X = random(windowWidth, 0);
   coin3Y =  random(0, windowHeight);
-  ballX = width/2;
-  ballY = height/2;
+  playerX = width/2;
+  playerY = height/2;
 }
 
 function draw() { 
   background(255);
-  placeCoins();
+  placeCoin1();
+  placeCoin2();
+  placeCoin3();
   createBall();
   moveBall();
+  coinCheck();
 }
 
-
+// Making ball (players icon)
 function createBall() {
   fill(r, g, b, a);
-  ball = ellipse(ballX, ballY, 30, [30]);
+  player = ellipse(playerX, playerY, 30, [30]);
 }
 
+
 // Creating coins for players to collect
-function placeCoins() {
-  if(ballX - coin1X < 5 && ballY - coin1Y < 5) {
-    // got coin true? ++
+function placeCoin1() {
+  if(playerX - coin1X < 15 && playerX - coin1Y > -15 && playerY - coin1Y < 15 && playerY - coin1Y > -15) {
+    touchedCoin1 = true;
+    player = 
   }
   else{
     fill("gold");
     coin1 = ellipse(coin1X, coin1Y, 10, 10);
   }
-  fill("gold");
-  coin2 = ellipse(coin2X, coin2Y, 10, 10);
-  fill("gold");
-  coin3 = ellipse(coin3X, coin3Y, 10, 10);
 }
 
-function createObstacals() {
-
+function placeCoin2() {
+  if(playerX - coin2X < 15 && playerX - coin2X > -15 && playerY - coin2Y < 15 && playerY - coin2Y > -15) {
+    touchedCoin2 = true;
+    
+  }
+  else{
+    fill("gold");
+    coin2 = ellipse(coin2X, coin2Y, 10, 10);
+  }
 }
 
-// function collectCoin1() {
-//   if(ballX - coin1X < 5 && ballY - coin1Y < 5) {
+function placeCoin3() {
+  if(playerX - coin3X < 15 && playerX - coin3X > -15 && playerY - coin3Y < 15 && playerY - coin3Y > -15) {
+    touchedCoin3 = true;
+  }
+  else{
+    fill("gold");
+    coin3 = ellipse(coin3X, coin3Y, 10, 10);
+  }
+}
 
-//   }
-// }
-
-function collectCoin() {
-  if(ballX - coin1X <= 5 && ballY - coin1Y <= 5){
-    print(points);
-    return points ++;
+// Checking if coins have been touched
+function coinCheck() {
+  if(touchedCoin1) {
+    fill(255);
+    coin1 = ellipse(coin1X, coin1Y, 10, 10);
+  }
+  if(touchedCoin2) {
+    fill(255);
+    coin2 = ellipse(coin2X, coin2Y, 10, 10);
+  }
+  if(touchedCoin3) {
+    fill(255);
+    coin3 = ellipse(coin3X, coin3Y, 10, 10);
   }
 }
 
 // Making  the ball move with WASD keys 
 function moveBall() {
   if (movingUp) {
-    ballY -= dy;
+    playerY -= dy;
   }
   if (movingLeft) {
-    ballX -= dx;
+    playerX -= dx;
   }
   if (movingDown) {
-    ballY += dy;
+    playerY += dy;
   }
   if (movingRight) {
-    ballX += dx;
+    playerX += dx;
   }
 }
 
