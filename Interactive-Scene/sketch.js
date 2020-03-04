@@ -53,15 +53,26 @@ function draw() {
   placeCoin1();
   placeCoin2();
   placeCoin3();
-  createBall();
-  moveBall();
   coinCheck();
+  createPlayer();
+  moveBall();
 }
 
 // Making ball (players icon)
-function createBall() {
+function createPlayer() {
   fill(r, g, b, a);
-  player = ellipse(playerX, playerY, 30, [30]);
+  if(touchedCoin1) {
+    player = ellipse(playerX, playerY, 50, [50]);
+  }
+  if(touchedCoin2) {
+    player = ellipse(playerX, playerY, 50, [15]);
+  }
+  if(touchedCoin3) {
+    player = ellipse(playerX, playerY, 15, [30]);
+  }
+  else{
+    player = ellipse(playerX, playerY, 30, [30]);
+  }
 }
 
 
@@ -69,7 +80,6 @@ function createBall() {
 function placeCoin1() {
   if(playerX - coin1X < 15 && playerX - coin1Y > -15 && playerY - coin1Y < 15 && playerY - coin1Y > -15) {
     touchedCoin1 = true;
-    player = 
   }
   else{
     fill("gold");
@@ -80,7 +90,6 @@ function placeCoin1() {
 function placeCoin2() {
   if(playerX - coin2X < 15 && playerX - coin2X > -15 && playerY - coin2Y < 15 && playerY - coin2Y > -15) {
     touchedCoin2 = true;
-    
   }
   else{
     fill("gold");
