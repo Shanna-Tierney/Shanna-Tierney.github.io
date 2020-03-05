@@ -9,16 +9,13 @@ let r;
 let g;
 let b;
 let a;
-let coin1;
-let coin2;
-let coin3;
 let coin1X;
 let coin1Y;
 let coin2X;
 let coin2Y;
 let coin3X;
 let coin3Y;
-let player;
+let playerShape;
 let playerX;
 let playerY;
 let dx = 5;
@@ -46,6 +43,7 @@ function setup() {
   coin3Y =  random(0, windowHeight);
   playerX = width/2;
   playerY = height/2;
+  playerShape = "circle";
 }
 
 function draw() { 
@@ -61,49 +59,55 @@ function draw() {
 // Making ball (players icon)
 function createPlayer() {
   fill(r, g, b, a);
-  if(touchedCoin1) {
-    player = ellipse(playerX, playerY, 50, [50]);
+  if(playerShape === "triangle") {
+    triangle(playerX, playerY, playerX + 15, playerY + 15, playerX + 15, playerY - 15);
   }
-  if(touchedCoin2) {
-    player = ellipse(playerX, playerY, 50, [15]);
+  else if(playerShape === "rectangle") {
+    rectMode(CENTER);
+    rect(playerX, playerY, 15, 30);
   }
-  if(touchedCoin3) {
-    player = ellipse(playerX, playerY, 15, [30]);
+  else if(playerShape === "ellipse") {
+    ellipse(playerX, playerY, 15, [30]);
   }
   else{
-    player = ellipse(playerX, playerY, 30, [30]);
+    ellipse(playerX, playerY, 30, [30]);
   }
+
+
 }
 
 
 // Creating coins for players to collect
 function placeCoin1() {
-  if(playerX - coin1X < 15 && playerX - coin1Y > -15 && playerY - coin1Y < 15 && playerY - coin1Y > -15) {
+  if(playerX - coin1X < 15 && playerX - coin1X > -15 && playerY - coin1Y < 15 && playerY - coin1Y > -15) {
     touchedCoin1 = true;
+    playerShape = "triangle";
   }
   else{
     fill("gold");
-    coin1 = ellipse(coin1X, coin1Y, 10, 10);
+    ellipse(coin1X, coin1Y, 10, 10);
   }
 }
 
 function placeCoin2() {
   if(playerX - coin2X < 15 && playerX - coin2X > -15 && playerY - coin2Y < 15 && playerY - coin2Y > -15) {
     touchedCoin2 = true;
+    playerShape = "rectangle";
   }
   else{
     fill("gold");
-    coin2 = ellipse(coin2X, coin2Y, 10, 10);
+    ellipse(coin2X, coin2Y, 10, 10);
   }
 }
 
 function placeCoin3() {
   if(playerX - coin3X < 15 && playerX - coin3X > -15 && playerY - coin3Y < 15 && playerY - coin3Y > -15) {
     touchedCoin3 = true;
+    playerShape = "ellipse";
   }
   else{
     fill("gold");
-    coin3 = ellipse(coin3X, coin3Y, 10, 10);
+    ellipse(coin3X, coin3Y, 10, 10);
   }
 }
 
@@ -111,15 +115,15 @@ function placeCoin3() {
 function coinCheck() {
   if(touchedCoin1) {
     fill(255);
-    coin1 = ellipse(coin1X, coin1Y, 10, 10);
+    ellipse(coin1X, coin1Y, 10, 10);
   }
   if(touchedCoin2) {
     fill(255);
-    coin2 = ellipse(coin2X, coin2Y, 10, 10);
+    ellipse(coin2X, coin2Y, 10, 10);
   }
   if(touchedCoin3) {
     fill(255);
-    coin3 = ellipse(coin3X, coin3Y, 10, 10);
+    ellipse(coin3X, coin3Y, 10, 10);
   }
 }
 
