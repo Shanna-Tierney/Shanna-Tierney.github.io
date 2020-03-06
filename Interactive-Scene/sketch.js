@@ -5,6 +5,7 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
+let canvas;
 let r;
 let g;
 let b;
@@ -24,13 +25,9 @@ let movingUp = false;
 let movingDown = false;
 let movingLeft = false;
 let movingRight = false;
-let points = 0;
-let touchedCoin1 = false;
-let touchedCoin2 = false;
-let touchedCoin3 = false;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  canvas = createCanvas(windowWidth, windowHeight);
   r = random(0, 255);
   g = random(0, 255);
   b = random(0, 255);
@@ -44,6 +41,8 @@ function setup() {
   playerX = width/2;
   playerY = height/2;
   playerShape = "circle";
+  canvas.mouseWheel(changeColor);
+
 }
 
 function draw() { 
@@ -51,37 +50,41 @@ function draw() {
   placeCoin1();
   placeCoin2();
   placeCoin3();
-  coinCheck();
   createPlayer();
-  moveBall();
+  movePlayer();
 }
 
-// Making ball (players icon)
+function noise() {
+  if(mouseClicked) {
+    
+  }
+}
+
+// Making player icon
 function createPlayer() {
   fill(r, g, b, a);
   if(playerShape === "triangle") {
-    triangle(playerX, playerY, playerX + 15, playerY + 15, playerX + 15, playerY - 15);
+    triangle(playerX - 15, playerY, playerX + 15, playerY + 15, playerX + 15, playerY - 15);
   }
   else if(playerShape === "rectangle") {
     rectMode(CENTER);
-    rect(playerX, playerY, 15, 30);
+    rect(playerX, playerY, 20, 35);
   }
   else if(playerShape === "ellipse") {
-    ellipse(playerX, playerY, 15, [30]);
+    ellipse(playerX, playerY, 20, [40]);
   }
   else{
     ellipse(playerX, playerY, 30, [30]);
   }
-
-
 }
 
 
-// Creating coins for players to collect
+// Creating coins and making playerShape change if touching them
 function placeCoin1() {
   if(playerX - coin1X < 15 && playerX - coin1X > -15 && playerY - coin1Y < 15 && playerY - coin1Y > -15) {
-    touchedCoin1 = true;
     playerShape = "triangle";
+    fill(255);
+    ellipse(coin1X, coin1Y, 10, 10);
   }
   else{
     fill("gold");
@@ -91,8 +94,9 @@ function placeCoin1() {
 
 function placeCoin2() {
   if(playerX - coin2X < 15 && playerX - coin2X > -15 && playerY - coin2Y < 15 && playerY - coin2Y > -15) {
-    touchedCoin2 = true;
     playerShape = "rectangle";
+    fill(255);
+    ellipse(coin2X, coin2Y, 10, 10);
   }
   else{
     fill("gold");
@@ -102,8 +106,9 @@ function placeCoin2() {
 
 function placeCoin3() {
   if(playerX - coin3X < 15 && playerX - coin3X > -15 && playerY - coin3Y < 15 && playerY - coin3Y > -15) {
-    touchedCoin3 = true;
     playerShape = "ellipse";
+    fill(255);
+    ellipse(coin3X, coin3Y, 10, 10);
   }
   else{
     fill("gold");
@@ -111,24 +116,18 @@ function placeCoin3() {
   }
 }
 
-// Checking if coins have been touched
-function coinCheck() {
-  if(touchedCoin1) {
-    fill(255);
-    ellipse(coin1X, coin1Y, 10, 10);
-  }
-  if(touchedCoin2) {
-    fill(255);
-    ellipse(coin2X, coin2Y, 10, 10);
-  }
-  if(touchedCoin3) {
-    fill(255);
-    ellipse(coin3X, coin3Y, 10, 10);
+//Setting player color to change with mouse wheel 
+function changeColor(event) {
+  if(event.deltaY) {
+    r = random(0, 255);
+    g = random(0, 255);
+    b = random(0, 255);
+    a = random(0, 255);
   }
 }
 
-// Making  the ball move with WASD keys 
-function moveBall() {
+// Making player move with WASD keys 
+function movePlayer() {
   if (movingUp) {
     playerY -= dy;
   }
