@@ -5,17 +5,8 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
-let canvas;
-let r;
-let g;
-let b;
-let a;
-let coin1X;
-let coin1Y;
-let coin2X;
-let coin2Y;
-let coin3X;
-let coin3Y;
+let playerColor;
+let coin;
 let playerShape;
 let playerX;
 let playerY;
@@ -28,21 +19,28 @@ let movingRight = false;
 
 function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
-  r = random(0, 255);
-  g = random(0, 255);
-  b = random(0, 255);
-  a = random(0, 255);
-  coin1X = random(windowWidth, 0);
-  coin1Y =  random(0, windowHeight);
-  coin2X = random(windowWidth, 0);
-  coin2Y =  random(0, windowHeight);
-  coin3X = random(windowWidth, 0);
-  coin3Y =  random(0, windowHeight);
+
+  color = {
+    r: random(0, 255),
+    g: random(0, 255),
+    b: random(0, 255),
+    a: random(0, 255),
+  };
+ 
+  coin = {
+    X1: random(windowWidth, 0),
+    Y1: random(0, windowHeight),
+    X2: random(windowWidth, 0),
+    Y2: random(0, windowHeight),
+    X3: random(windowWidth, 0),
+    Y3: random(0, windowHeight),
+  };
+
   playerX = width/2;
   playerY = height/2;
   playerShape = "circle";
   canvas.mouseWheel(changeColor);
-
+  canvas.mousePressed(song);
 }
 
 function draw() { 
@@ -54,15 +52,22 @@ function draw() {
   movePlayer();
 }
 
-function noise() {
-  if(mouseClicked) {
-    
+
+
+
+function song() {
+  funSong.play();
+
+  if (keyIsPressed && key === "s") {
+    funSong.stop();
   }
 }
 
+
+
 // Making player icon
 function createPlayer() {
-  fill(r, g, b, a);
+  fill(color.r, color.g, color.b, color.a);
   if(playerShape === "triangle") {
     triangle(playerX - 15, playerY, playerX + 15, playerY + 15, playerX + 15, playerY - 15);
   }
@@ -81,48 +86,48 @@ function createPlayer() {
 
 // Creating coins and making playerShape change if touching them
 function placeCoin1() {
-  if(playerX - coin1X < 15 && playerX - coin1X > -15 && playerY - coin1Y < 15 && playerY - coin1Y > -15) {
+  if(playerX - coin.X1 < 15 && playerX - coin.X1 > -15 && playerY - coin.Y1 < 15 && playerY - coin.Y1 > -15) {
     playerShape = "triangle";
-    fill(255);
-    ellipse(coin1X, coin1Y, 10, 10);
+    fill("lime");
+    ellipse(coin.X1, coin.Y1, 10, 10);
   }
   else{
-    fill("gold");
-    ellipse(coin1X, coin1Y, 10, 10);
+    fill("purple");
+    ellipse(coin.X1, coin.Y1, 10, 10);
   }
 }
 
 function placeCoin2() {
-  if(playerX - coin2X < 15 && playerX - coin2X > -15 && playerY - coin2Y < 15 && playerY - coin2Y > -15) {
+  if(playerX - coin.X2 < 15 && playerX - coin.X2 > -15 && playerY - coin.Y2 < 15 && playerY - coin.Y2 > -15) {
     playerShape = "rectangle";
-    fill(255);
-    ellipse(coin2X, coin2Y, 10, 10);
+    fill("lime");
+    ellipse(coin.X2, coin.Y2, 10, 10);
   }
   else{
     fill("gold");
-    ellipse(coin2X, coin2Y, 10, 10);
+    ellipse(coin.X2, coin.Y2, 10, 10);
   }
 }
 
 function placeCoin3() {
-  if(playerX - coin3X < 15 && playerX - coin3X > -15 && playerY - coin3Y < 15 && playerY - coin3Y > -15) {
+  if(playerX - coin.X3 < 15 && playerX - coin.X3 > -15 && playerY - coin.Y3 < 15 && playerY - coin.Y3 > -15) {
     playerShape = "ellipse";
-    fill(255);
-    ellipse(coin3X, coin3Y, 10, 10);
+    fill("lime");
+    ellipse(coin.X3, coin.Y3, 10, 10);
   }
   else{
-    fill("gold");
-    ellipse(coin3X, coin3Y, 10, 10);
+    fill("red");
+    ellipse(coin.X3, coin.Y3, 10, 10);
   }
 }
 
 //Setting player color to change with mouse wheel 
-function changeColor(event) {
-  if(event.deltaY) {
-    r = random(0, 255);
-    g = random(0, 255);
-    b = random(0, 255);
-    a = random(0, 255);
+function changeColor(scroll) {
+  if(scroll.deltaY) {
+    color.r = random(0, 255);
+    color.g = random(0, 255);
+    color.b = random(0, 255);
+    color.a = random(0, 255);
   }
 }
 
