@@ -3,22 +3,29 @@
 // March 7, 2020
 //
 // Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// Added sound into project, made player change shapes, refactored code using object arrays and made color of player randomly change when mouse wheel scrolls
 
-
+//Will be object arrays
+let color;
 let coin;
 let player;
+
+//Will be used to make player move
 let dx = 5;
 let dy = 5;
 let movingUp = false;
 let movingDown = false;
 let movingLeft = false;
 let movingRight = false;
+
+//Will be sound file
 let funSong;
 
+//Setting up the scene 
 function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
 
+  //Setting up object arrays
   color = {
     r: random(0, 255),
     g: random(0, 255),
@@ -43,34 +50,16 @@ function setup() {
     Rect: "rect",
     Ellipse: "ellipse",
   }
-
-  canvas.mouseWheel(changeColor);
-  
 }
 
+//Drawing scene
 function draw() { 
   background(255);
   placeCoins();
   createPlayer();
   movePlayer();
+  canvas.mouseWheel(changeColor);
   canvas.mousePressed(song);
-}
-
-function preload() {
-  soundFormats('ogg');
-  funSong = loadSound('assets/ChickenDance');
-}
-
-function song() {
-  funSong.play();
-
-  if (keyIsPressed && keyCode === "ENTER") {
-    funSong.stop();
-  }
-}
-
-function keyPressed() {
-
 }
 
 // Creating coins and making player shape change if touching them
@@ -125,24 +114,26 @@ function createPlayer() {
   //Filling random color
   fill(color.r, color.g, color.b, color.a);
 
-  //Changing player shape based on coins (location)
+  //Changing player shape based on coins (location of player)
   if(player.Circle === player.Triangle) {
     triangle(player.X - 15, player.Y, player.X + 15, player.Y + 15, player.X + 15, player.Y - 15);
   }
+
   else if(player.Circle === player.Rect) {
     rectMode(CENTER);
     rect(player.X, player.Y, 20, 35);
   }
+
   else if(player.Circle === player.Ellipse) {
     ellipse(player.X, player.Y, 20, [40]);
   }
+
   else{
     ellipse(player.X, player.Y, 30, [30]);
   }
 }
 
-
-//Setting player color to change with mouse wheel 
+//Setting player color to change if mouse wheel scrolls 
 function changeColor(scroll) {
   if(scroll.deltaY) {
     //Setting different colors each time
@@ -196,5 +187,22 @@ function keyReleased() {
   }
   if (key === "d") {
     movingRight = false;
+  }
+}
+
+//Pre-loading the sound
+function preload() {
+  soundFormats('ogg');
+  funSong = loadSound('assets/ChickenDance');
+}
+
+//Playing sound if  screen clicked
+//Stoping sound if "t" pressed and screen clicked
+function song() {
+  if (keyPressed && key === "t") {
+    funSong.pause();
+  }
+  else {
+    funSong.play();
   }
 }
