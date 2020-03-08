@@ -1,21 +1,20 @@
 // Interactive Scene
 // Shanna Tierney
-// Date
+// March 7, 2020
 //
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
-let playerColor;
+
 let coin;
-let playerShape;
-let playerX;
-let playerY;
+let player;
 let dx = 5;
 let dy = 5;
 let movingUp = false;
 let movingDown = false;
 let movingLeft = false;
 let movingRight = false;
+let funSong;
 
 function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
@@ -36,82 +35,81 @@ function setup() {
     Y3: random(0, windowHeight),
   };
 
-  playerX = width/2;
-  playerY = height/2;
-  playerShape = "circle";
+  player = {
+    X: width/2,
+    Y: height/2,
+    Circle: "circle",
+    Triangle: "triangle",
+    Rect: "rect",
+    Ellipse: "ellipse",
+  }
+
   canvas.mouseWheel(changeColor);
-  canvas.mousePressed(song);
+  
 }
 
 function draw() { 
   background(255);
-  placeCoin1();
-  placeCoin2();
-  placeCoin3();
+  placeCoins();
   createPlayer();
   movePlayer();
+  canvas.mousePressed(song);
 }
 
-
-
+function preload() {
+  soundFormats('ogg');
+  funSong = loadSound('assets/ChickenDance');
+}
 
 function song() {
   funSong.play();
 
-  if (keyIsPressed && key === "s") {
+  if (keyIsPressed && keyCode === "ENTER") {
     funSong.stop();
   }
 }
 
+function keyPressed() {
 
-
-// Making player icon
-function createPlayer() {
-  fill(color.r, color.g, color.b, color.a);
-  if(playerShape === "triangle") {
-    triangle(playerX - 15, playerY, playerX + 15, playerY + 15, playerX + 15, playerY - 15);
-  }
-  else if(playerShape === "rectangle") {
-    rectMode(CENTER);
-    rect(playerX, playerY, 20, 35);
-  }
-  else if(playerShape === "ellipse") {
-    ellipse(playerX, playerY, 20, [40]);
-  }
-  else{
-    ellipse(playerX, playerY, 30, [30]);
-  }
 }
 
+// Creating coins and making player shape change if touching them
+function placeCoins() {
 
-// Creating coins and making playerShape change if touching them
-function placeCoin1() {
-  if(playerX - coin.X1 < 15 && playerX - coin.X1 > -15 && playerY - coin.Y1 < 15 && playerY - coin.Y1 > -15) {
-    playerShape = "triangle";
+  //Place coin1
+  if(player.X - coin.X1 < 15 && player.X - coin.X1 > -15 && player.Y - coin.Y1 < 15 && player.Y - coin.Y1 > -15) {
+
+     //player shape will be triangle
+    player.Circle = player.Triangle;
+
     fill("lime");
     ellipse(coin.X1, coin.Y1, 10, 10);
   }
   else{
-    fill("purple");
+    fill("blue");
     ellipse(coin.X1, coin.Y1, 10, 10);
   }
-}
 
-function placeCoin2() {
-  if(playerX - coin.X2 < 15 && playerX - coin.X2 > -15 && playerY - coin.Y2 < 15 && playerY - coin.Y2 > -15) {
-    playerShape = "rectangle";
+  //Place coin2
+  if(player.X - coin.X2 < 15 && player.X - coin.X2 > -15 && player.Y - coin.Y2 < 15 && player.Y - coin.Y2 > -15) {
+
+     //player shape will be rectangle
+    player.Circle = player.Rect;
+
     fill("lime");
     ellipse(coin.X2, coin.Y2, 10, 10);
   }
   else{
-    fill("gold");
+    fill("yellow");
     ellipse(coin.X2, coin.Y2, 10, 10);
   }
-}
 
-function placeCoin3() {
-  if(playerX - coin.X3 < 15 && playerX - coin.X3 > -15 && playerY - coin.Y3 < 15 && playerY - coin.Y3 > -15) {
-    playerShape = "ellipse";
+  //Place coin3
+  if(player.X - coin.X3 < 15 && player.X - coin.X3 > -15 && player.Y - coin.Y3 < 15 && player.Y - coin.Y3 > -15) {
+
+    //player shape will be ellipse
+    player.Circle = player.Ellipse;
+
     fill("lime");
     ellipse(coin.X3, coin.Y3, 10, 10);
   }
@@ -121,9 +119,33 @@ function placeCoin3() {
   }
 }
 
+// Making player icon
+function createPlayer() {
+
+  //Filling random color
+  fill(color.r, color.g, color.b, color.a);
+
+  //Changing player shape based on coins (location)
+  if(player.Circle === player.Triangle) {
+    triangle(player.X - 15, player.Y, player.X + 15, player.Y + 15, player.X + 15, player.Y - 15);
+  }
+  else if(player.Circle === player.Rect) {
+    rectMode(CENTER);
+    rect(player.X, player.Y, 20, 35);
+  }
+  else if(player.Circle === player.Ellipse) {
+    ellipse(player.X, player.Y, 20, [40]);
+  }
+  else{
+    ellipse(player.X, player.Y, 30, [30]);
+  }
+}
+
+
 //Setting player color to change with mouse wheel 
 function changeColor(scroll) {
   if(scroll.deltaY) {
+    //Setting different colors each time
     color.r = random(0, 255);
     color.g = random(0, 255);
     color.b = random(0, 255);
@@ -134,16 +156,16 @@ function changeColor(scroll) {
 // Making player move with WASD keys 
 function movePlayer() {
   if (movingUp) {
-    playerY -= dy;
+    player.Y -= dy;
   }
   if (movingLeft) {
-    playerX -= dx;
+    player.X -= dx;
   }
   if (movingDown) {
-    playerY += dy;
+    player.Y += dy;
   }
   if (movingRight) {
-    playerX += dx;
+    player.X += dx;
   }
 }
 
