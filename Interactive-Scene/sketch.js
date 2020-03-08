@@ -3,7 +3,7 @@
 // March 7, 2020
 //
 // Extra for Experts:
-// Added sound into project, made player change shapes, refactored code using object arrays and made color of player randomly change when mouse wheel scrolls
+// Added sound into project, made player change shapes, refactored code using object arrays and made color of player randomly mouse wheel as input
 
 //Will be object arrays
 let color;
