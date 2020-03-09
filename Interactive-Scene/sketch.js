@@ -6,7 +6,6 @@
 // Added sound into project, made player change shapes, refactored code using object arrays and made color of player randomly mouse wheel as input
 
 //Will be object arrays
-let color;
 let coin;
 let player;
 
@@ -49,7 +48,7 @@ function setup() {
     Triangle: "triangle",
     Rect: "rect",
     Ellipse: "ellipse",
-  }
+  };
 }
 
 //Drawing scene
@@ -68,7 +67,7 @@ function placeCoins() {
   //Place coin1
   if(player.X - coin.X1 < 15 && player.X - coin.X1 > -15 && player.Y - coin.Y1 < 15 && player.Y - coin.Y1 > -15) {
 
-     //player shape will be triangle
+    //player shape will be triangle
     player.Circle = player.Triangle;
 
     fill("lime");
@@ -82,7 +81,7 @@ function placeCoins() {
   //Place coin2
   if(player.X - coin.X2 < 15 && player.X - coin.X2 > -15 && player.Y - coin.Y2 < 15 && player.Y - coin.Y2 > -15) {
 
-     //player shape will be rectangle
+    //player shape will be rectangle
     player.Circle = player.Rect;
 
     fill("lime");
@@ -192,8 +191,8 @@ function keyReleased() {
 
 //Pre-loading the sound
 function preload() {
-  soundFormats('ogg');
-  funSong = loadSound('assets/ChickenDance');
+  soundFormats("ogg");
+  funSong = loadSound("assets/ChickenDance");
 }
 
 //Playing sound if  screen clicked
