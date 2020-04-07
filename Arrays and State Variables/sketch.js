@@ -11,10 +11,9 @@ let mario;
 
 let movingUp = false;
 let movingDown = false;
-
-let startScreen = true;
-let playingGame = false;
-let gameOverScreen = false;
+// state variable
+let screen = "start";
+let colour = ["blue", "pink", "red", "yellow", "green", "purple", "orange", "lime", "black", "grey", ]
 
 function preload() {
   marioImage = loadImage("assets/mario.png");
@@ -30,26 +29,26 @@ function setup() {
 
   wall = {
     X: 0,
-    X2: 0,
+    //X2: 0,
     W: 100,
     H: height,
-    DX: 5,
+    DX: 10,
   }
 }
 
 // draw function
 function draw() {
-  background(220);
-  //Checks and calls the startScreen function
-  if (startScreen) {
+  background(120, 140, 220, 30);
+  //Checks and c220alls the startScreen function
+  if (screen === "start") {
     drawStartScreen();
   }
   
-  if (playingGame) {
+  if (screen === "playing") {
     modePlayingGame();
   }
 
-  if (gameOverScreen) {
+  if (screen === "gameOver") {
     drawGameOverScreen();
   }
 }
@@ -59,49 +58,50 @@ function draw() {
 function drawStartScreen() {
   textSize(100);
   fill("green");
-  text("Mario Jump Game", width/8, height/4);
+  text("Mario Jump Game", width/4, height/4);
   fill("red");
   textSize(50);
-  text("Start",  width/4, height/2);
+  text("Start",  width/3, height/2);
 }
 
 function modePlayingGame() {
   displayMario();
   moveMario();
   displayWall();
-  moveWall();Wall();
+  moveWall();
+  hitWall();
 }
 
 function drawGameOverScreen() {
   textSize(100);
   fill("red");
-  text("You Lose", width/8, height/2);
+  text("You Lose", width/2, height/2);
   fill("green");
   textSize(50);
-  text("You Survived Walls!", width/8, height + height/2);
-  text("Press Space To Try Again", width/8, height/2);
+  text("You Survived Walls!", width/2, height + height/2);
+  text("Press Space To Try Again", width/3, height - height/5);
 }
 
 // moving with keys
 function keyPressed() {
-  if (startScreen) {
+  if (screen === "start") {
     if (key === " ") {
-      startScreen = false;
-      playingGame = true;
+      screen = "playing";
+      //console.log(screen);
+
     }
   }
   
-  if (playingGame) {
+  if (screen === "playing") {
     if (key === " ") {
       movingUp = true;
       movingDown = false;
     }
   }
   
-  if (gameOverScreen) {
+  if (screen === "gameOver") {
     if (key === " ") {
-      gameOverScreen = false;
-      startScreen = true;
+      screen = "start";
     }
   }
 }
@@ -136,10 +136,11 @@ function displayMario() {
 
 // making walls move
 function moveWall() {
-  if (playingGame) {
+  if (screen === "playing") {
     if (wall.X <= 0){
       wall.X = width;
       wall.Y = random(height/2, height)
+      fill(random(colour));
     }
     wall.X -= wall.DX;
   }
@@ -147,23 +148,22 @@ function moveWall() {
 
 // making walls appear
 function displayWall() {
-  fill("black");
+  
   rect(wall.X, wall.Y, wall.W, wall.H);
-  rect(wall.X2, wall.Y, wall.W, wall.H);
+  //rect(wall.X2, wall.Y, wall.W, wall.H);
 
 }
 
 // making the hitwall for mario and wall
 
 function hitWall(){
-  if (mario.Y + 100 >= wall.Y) {
-    if (mario.X + 100 >= wall.X) {
-      wall.DX = 0;
-      mario.DY = 0;
-      wall.X = width;
-      playingGame = false;
-      gameOverScreen = true;
-      
-    }
+  if (mario.Y + 100 >= wall.Y && mario.X + 100 >= wall.X) {
+    wall.DX = 0;
+    mario.DY = 0;
+    wall.X = width;
+    screen = "gameOver";
+    mario.Y = height - height/7;
   }
+  wall.DX = 10;
+  mario.DY = 10;
 }
