@@ -3,17 +3,22 @@
 // April 8, 2020
 //
 // Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// Added object arrays, made a variable that keeps track of score, used millis function to rotate Mario when he died. 
 
 
 let marioImage;
 let mario;
 
+let counter;
+let waitTime = 500;
+
 let movingUp = false;
 let movingDown = false;
 // state variable
 let screen = "start";
-let colour = ["blue", "pink", "red", "yellow", "green", "purple", "orange", "lime", "black", "grey", ]
+//Arrays
+let colour = ["blue", "pink", "red", "yellow", "green", "purple", "orange", "lime", "black", "grey", ];
+let wallHeight = [800, 780, 760, 740, 720, 700, 680, 660, 640, 620, 600, 580, 560, 540, 520, 500, 480, 460, 440, 420, 400, 380, 360, 340, 320, 300 ];
 
 function preload() {
   marioImage = loadImage("assets/mario.png");
@@ -21,6 +26,10 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+
+  angleMode(DEGREES);
+  imageMode(CENTER);
+
   mario = {
     X: width/7,
     Y: height - height/7,
@@ -28,18 +37,20 @@ function setup() {
   }
 
   wall = {
-    X: 0,
-    //X2: 0,
-    W: 100,
+    X: width,
+    W: 300,
     H: height,
     DX: 10,
+    Count: -1,
   }
+
+  counter = millis();
 }
 
 // draw function
 function draw() {
-  background(120, 140, 220, 30);
-  //Checks and c220alls the startScreen function
+  background(120, 140, 220);
+  //State variable for changing screen function
   if (screen === "start") {
     drawStartScreen();
   }
@@ -56,12 +67,14 @@ function draw() {
 
 
 function drawStartScreen() {
+  wall.Count = 0;
   textSize(100);
-  fill("green");
+  fill("black");
   text("Mario Jump Game", width/4, height/4);
-  fill("red");
+  fill("black");
   textSize(50);
-  text("Start",  width/3, height/2);
+  text("Press Space to Start",  width/3, height/2);
+  
 }
 
 function modePlayingGame() {
@@ -70,16 +83,17 @@ function modePlayingGame() {
   displayWall();
   moveWall();
   hitWall();
+  displayScore();
 }
 
 function drawGameOverScreen() {
   textSize(100);
-  fill("red");
-  text("You Lose", width/2, height/2);
-  fill("green");
+  fill("black");
+  text("You Survived " + wall.Count + " Walls!", width/5, height/2);
+  fill("black");
   textSize(50);
-  text("You Survived Walls!", width/2, height + height/2);
   text("Press Space To Try Again", width/3, height - height/5);
+  
 }
 
 // moving with keys
@@ -139,28 +153,46 @@ function moveWall() {
   if (screen === "playing") {
     if (wall.X <= 0){
       wall.X = width;
-      wall.Y = random(height/2, height)
+      wall.Y = random(wallHeight);
+      //calls our array of colours
       fill(random(colour));
+      wall.Count ++;
+      //console.log(wall.Count);
     }
     wall.X -= wall.DX;
   }
 }
 
+function displayScore() {
+  text("Score: " + wall.Count, width - width/7, height/8);
+  
+}
+
 // making walls appear
 function displayWall() {
-  
   rect(wall.X, wall.Y, wall.W, wall.H);
-  //rect(wall.X2, wall.Y, wall.W, wall.H);
-
 }
 
 // making the hitwall for mario and wall
 
 function hitWall(){
   if (mario.Y + 100 >= wall.Y && mario.X + 100 >= wall.X) {
+    counter = stopCounter;
     wall.DX = 0;
     mario.DY = 0;
     wall.X = width;
+
+    push(marioImage);
+    translate(100, 50);
+    while (rotations < 76) {
+      if (millis() > stopCounter + waitTime) {
+        rotate(1);
+        rotations ++;
+      }
+    }
+    rect(0, 0, 75, 100);
+    pop(marioImage);
+
     screen = "gameOver";
     mario.Y = height - height/7;
   }
