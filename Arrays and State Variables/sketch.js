@@ -9,9 +9,6 @@
 let marioImage;
 let mario;
 
-let counter;
-let waitTime = 500;
-
 let movingUp = false;
 let movingDown = false;
 // state variable
@@ -27,9 +24,6 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  angleMode(DEGREES);
-  imageMode(CENTER);
-
   mario = {
     X: width/7,
     Y: height - height/7,
@@ -43,8 +37,6 @@ function setup() {
     DX: 10,
     Count: -1,
   }
-
-  counter = millis();
 }
 
 // draw function
@@ -69,9 +61,9 @@ function draw() {
 function drawStartScreen() {
   wall.Count = 0;
   textSize(100);
-  fill("black");
+  fill("green");
   text("Mario Jump Game", width/4, height/4);
-  fill("black");
+  fill("red");
   textSize(50);
   text("Press Space to Start",  width/3, height/2);
   
@@ -88,9 +80,9 @@ function modePlayingGame() {
 
 function drawGameOverScreen() {
   textSize(100);
-  fill("black");
+  fill("red");
   text("You Survived " + wall.Count + " Walls!", width/5, height/2);
-  fill("black");
+  fill("green");
   textSize(50);
   text("Press Space To Try Again", width/3, height - height/5);
   
@@ -101,7 +93,6 @@ function keyPressed() {
   if (screen === "start") {
     if (key === " ") {
       screen = "playing";
-      //console.log(screen);
 
     }
   }
@@ -173,26 +164,13 @@ function displayWall() {
   rect(wall.X, wall.Y, wall.W, wall.H);
 }
 
-// making the hitwall for mario and wall
+// making it so mario dies when he hits a wall or touches the roof
 
 function hitWall(){
-  if (mario.Y + 100 >= wall.Y && mario.X + 100 >= wall.X) {
-    counter = stopCounter;
+  if (mario.Y + 100 >= wall.Y && mario.X + 100 >= wall.X || mario.Y <= 0) {
     wall.DX = 0;
     mario.DY = 0;
     wall.X = width;
-
-    push(marioImage);
-    translate(100, 50);
-    while (rotations < 76) {
-      if (millis() > stopCounter + waitTime) {
-        rotate(1);
-        rotations ++;
-      }
-    }
-    rect(0, 0, 75, 100);
-    pop(marioImage);
-
     screen = "gameOver";
     mario.Y = height - height/7;
   }
