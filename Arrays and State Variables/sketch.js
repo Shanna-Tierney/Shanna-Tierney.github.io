@@ -1,6 +1,6 @@
 // Arrays and State Variables
 // Shanna and Blake Tierney
-// April 8, 2020
+// April 20, 2020
 //
 // Extra for Experts:
 // Added object arrays, made a variable that keeps track of score, used millis function to rotate Mario when he died. 
@@ -8,6 +8,9 @@
 
 let marioImage;
 let mario;
+
+let bowser;
+let fireBallArray = [];
 
 let movingUp = false;
 let movingDown = false;
@@ -19,6 +22,7 @@ let wallHeight = [800, 780, 760, 740, 720, 700, 680, 660, 640, 620, 600, 580, 56
 
 function preload() {
   marioImage = loadImage("assets/mario.png");
+  bowserImage = loadImage("assets/bowser.png");
 }
 
 function setup() {
@@ -30,12 +34,30 @@ function setup() {
     DY: 10,
   }
 
+  bowser = {
+    X: width/2 - 100,
+    Y: height/2 - 100,
+    DX: 10,
+    DY: 10,
+  }
   wall = {
-    X: width,
+    X: width/4,
     W: 300,
     H: height,
     DX: 10,
     Count: -1,
+  }
+
+  for (let i=0; i<50; i++) {
+    let fireBall = {
+      dx: random(-5, 5), 
+      dy: random(-5, 5),
+      radius: 30,
+      x: width, 
+      y: random(0, height),
+      fillColor: color("red"),
+    };
+    fireBallArray.push(fireBall);
   }
 }
 
@@ -49,6 +71,7 @@ function draw() {
   
   if (screen === "playing") {
     modePlayingGame();
+    
   }
 
   if (screen === "gameOver") {
@@ -76,6 +99,11 @@ function modePlayingGame() {
   moveWall();
   hitWall();
   displayScore();
+  if (wall.Count >= 3) {
+    bowserLevel();
+    fireBalls();
+    moveBowser();
+  }
 }
 
 function drawGameOverScreen() {
@@ -142,7 +170,7 @@ function displayMario() {
 // making walls move
 function moveWall() {
   if (screen === "playing") {
-    if (wall.X <= 0){
+    if (wall.X < 0){
       wall.X = width;
       wall.Y = random(wallHeight);
       //calls our array of colours
@@ -176,4 +204,38 @@ function hitWall(){
   }
   wall.DX = 10;
   mario.DY = 10;
+}
+
+
+
+function displayBowser() {
+  image(bowserImage, bowser.X, bowser.Y, 200, 200);
+}
+
+function bowserLevel() {
+  wall.X = width;
+  wall.DX = 0;
+  displayBowser();
+}
+
+function moveBowser(){
+  let dx = mario.X - bowser.X;
+  let dy = mario.Y - bowser.Y;
+  let length = Math.sqrt(dx * dx + dy * dy);
+  if (length) {
+    dx /= length;
+    dy /= length;
+  }
+  bowser.X += dx * millis() * 5;
+  bowser.Y += dy * millis() * 5;
+}
+
+function fireBalls() {
+  for (let i=0; i< fireBallArray.length; i++) {
+    let fireBall = fireBallArray[i];
+    fireBall.x += fireBall.dx;
+    fireBall.y += fireBall.dy;
+    fill(fireBall.fillColor);
+    ellipse(fireBall.x, fireBall.y, fireBall.radius*2, fireBall.radius*2);
+  }
 }
