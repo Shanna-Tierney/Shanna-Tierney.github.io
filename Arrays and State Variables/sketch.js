@@ -2,8 +2,9 @@
 // Shanna and Blake Tierney
 // April 20, 2020
 //
+// State varible used for screen variation/states.
 // Extra for Experts:
-// Added object arrays, made a variable that keeps track of score, made mario rotate and shrink. 
+// Added object arrays, made a variable that keeps track of score, added 3D effects for visual appeal (glare on pipes), made mario rotate and shrink. 
 
 
 let marioImage;
@@ -17,6 +18,7 @@ let screen = "start";
 let colour = ["DarkGreen", "DarkOliveGreen", "DarkKhaki", "DarkSeaGreen", "Green", "ForestGreen", "LightGreen", "LimeGreen", "MediumSeaGreen", "OliveDrab", "PaleGreen"];
 let wallHeight = [800, 780, 760, 740, 720, 700, 680, 660, 640, 620, 600, 580, 560, 540, 520, 500, 480, 460, 440, 420, 400, 380, 360, 340, 320, 300 ];
 
+// laoding images
 function preload() {
   marioImage = loadImage("assets/mario.png");
   let bg = loadImage("assets/bg.png");
@@ -71,9 +73,9 @@ function instructionsScreen() {
     text("The objective of the game is to survive as many walls as you can.", width/4, height/9);
     text("You press space bar to make Mario jump. If you hit the roof or the walls, Mario dies.", width/5, height/4.5);
     text("We'll give you a pitty point, if it's your first turn, to get you started off.", width/4, height/3);
-    textSize(75);
+    textSize(50);
     fill("green");
-    text("Press SPACE to begin.", width/3.5, height-height/3);
+    text("Press SPACE to begin.", width/2.9, height-height/3);
   }
 }
 
@@ -88,7 +90,6 @@ function modePlayingGame() {
   }
 }
 
-// drawing gameover screen
 function drawGameOverScreen() {
   if (screen === "gameOver") {
     rotateMario();
@@ -146,6 +147,11 @@ function keyReleased() {
   }
 }
 
+// making mario's image appear
+function displayMario() {
+  image(marioImage, mario.X, mario.Y, mario.Width, mario.Height);
+}
+
 // making mario jump
 function moveMario() {
   if (mario.Y <= height - height/7) {
@@ -163,9 +169,16 @@ function moveMario() {
   }
 }
 
-// making mario's image appear
-function displayMario() {
-  image(marioImage, mario.X, mario.Y, mario.Width, mario.Height);
+// making walls appear
+function displayWall() {
+  rect(wall.X, wall.Y, wall.W, wall.H);
+  rect(wall.X - 40, wall.Y, wall.W + 80, 100);
+  stroke(230, 255, 200);
+  strokeWeight(25);
+  rect(wall.X - 5, wall.Y + 20, 15, 60);
+  rect(wall.X + 30, wall.Y  + 120, 15, wall.H);
+  stroke("black");
+  strokeWeight(1);
 }
 
 // making walls move
@@ -198,32 +211,6 @@ function displayScore() {
   text("Score: " + wall.Count, width - width/7, height/8);
 }
 
-// making walls appear
-function displayWall() {
-  rect(wall.X, wall.Y, wall.W, wall.H);
-  rect(wall.X - 40, wall.Y, wall.W + 80, 100);
-  stroke(230, 255, 200);
-  strokeWeight(25);
-  rect(wall.X - 5, wall.Y + 20, 15, 60);
-  rect(wall.X + 30, wall.Y  + 120, 15, wall.H);
-  stroke("black");
-  strokeWeight(1)
-;}
-
-// making mario rotate and shrink when he dies
-function rotateMario() {
-  angle += 0.2;
-  push();
-  translate(mario.X, mario.Y);
-  rotate(angle);
-  image(marioImage, 0, 0, mario.Width, mario.Height);
-  pop();
-  if (mario.Width >= 2) {
-    mario.Width -= 1;
-    mario.Height -= 1;
-  }
-}
-
 // making it so mario dies when he hits a wall or touches the roof
 function hitWall(){
   if (mario.Y + 60 >= wall.Y && mario.X + 60 >= wall.X || mario.Y <= 50) {
@@ -234,5 +221,17 @@ function hitWall(){
   }
 }
 
-
-
+// making mario rotate and shrink when he dies
+function rotateMario() {
+  angle += 0.2;
+  push();
+  translate(mario.X, mario.Y);
+  rotate(angle);
+  image(marioImage, 0, 0, mario.Width, mario.Height);
+  pop();
+  // makes mario seem to disapear
+  if (mario.Width >= 2) {
+    mario.Width -= 1;
+    mario.Height -= 1;
+  }
+}
