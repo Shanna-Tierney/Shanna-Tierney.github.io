@@ -26,6 +26,8 @@ let x;
 let y;
 let place;
 let r;
+let w;
+let h;
 
 let screen = "mainMenu";
 
@@ -35,6 +37,8 @@ function setup() {
   cols = width/resolution;
   rows = height/resolution; 
   grid = make2DArray(3, 3);
+  w = width / 3;
+  h = height / 3;
   currentPlayer = floor(random(players.length));
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
@@ -48,6 +52,7 @@ function setup() {
 function draw() {
   mainMenu();
   singlePlayer();
+  multiplayer();
   aiMode();
 }
 
@@ -65,16 +70,11 @@ function keyPressed() {
       screen = "singlePlayer";
     }
     if (key === "2") {
-      screen = "multiPlayer";
+      screen = "multiplayer";
     }
     if (key === "3") {
       screen = "aiMode";
     }
-  }
-  // doesn't work
-  if (screen === "aiMode") {
-    if (key === "r");
-    screen = "aiMode"; 
   }
 }
 
@@ -101,89 +101,142 @@ function singlePlayer() {
   }
 }
 
+function multiplayer() {
+  if (screen === "multiplayer") {
+    drawGrid();
+    drawAiO();
+   
+  }
+}
+
 function aiMode() {
   if (screen === "aiMode") {
-    let w = width / 3;
-    let h = height / 3;
     drawGrid();
-    for (let i = 0; i < 3; i++) {
-      for (let j = 0; j < 3; j++) {
-        x = w * i + w / 2;
-        y = h * j + h / 2;
-        place = grid[i][j];
-        textSize(32);
-        r = w / 4;
-        drawO();
-        drawX();
+    drawAiO();
+    drawAiX();
+    printResults();
+  }
+}
+
+
+function drawAiX() {
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      textSize(32);
+      x = w * i + w / 2;
+      y = h * j + h / 2;
+      place = grid[i][j];
+      r = w / 4;
+      if (place === players[0]) {
+        line(x - r, y - r, x + r, y + r);
+        line(x + r, y - r, x - r, y + r);
       }
     }
-  
-    let result = checkWinner();
-    if (result != null) {
-      noLoop();
-      let resultP = createP('');
-      resultP.style('font-size', '32pt');
-      if (result === 'tie') {
-        resultP.html('Tie!');
+  }
+}
+
+function drawAiO() {
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      textSize(32);
+      x = w * i + w / 2;
+      y = h * j + h / 2;
+      place = grid[i][j];
+      r = w / 4;
+      if (place === players[1]) {
+        noFill();
+        ellipse(x, y, r * 2);
       } 
-      else {
-        resultP.html(`${result} wins!`);
-      }
-    } 
-    else {
-      nextTurn();
     }
   }
 }
 
-function drawX() {
-  if (place === players[0]) {
-    line(x - r, y - r, x + r, y + r);
-    line(x + r, y - r, x - r, y + r);
+function drawPlayerX() {
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      textSize(32);
+      x = w * i + w / 2;
+      y = h * j + h / 2;
+      place = grid[i][j];
+      r = w / 4;
+      if (place === players[0]) {
+        line(x - r, y - r, x + r, y + r);
+        line(x + r, y - r, x - r, y + r);
+      }
+    }
   }
 }
 
-function drawO() {
-  if (place === players[1]) {
-    noFill();
-    ellipse(x, y, r * 2);
-  } 
+function drawPlayerO() {
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      textSize(32);
+      x = w * i + w / 2;
+      y = h * j + h / 2;
+      place = grid[i][j];
+      r = w / 4;
+      if (place === players[1]) {
+        noFill();
+        ellipse(x, y, r * 2);
+      } 
+    }
+  }
 }
 
-function equals3(a, b, c) {
-  return a === b && b === c && a != '';
+function lineOf3(x, y, z) {
+  return x === y && y === z && x != '';
 }
 
-function checkWinner() {
+function checkLineOf3() {
   let winner = null;
 
-  // horizontal
+  // checking for horizontal line
   for (let i = 0; i < 3; i++) {
-    if (equals3(grid[i][0], grid[i][1], grid[i][2])) {
+    if (lineOf3(grid[i][0], grid[i][1], grid[i][2])) {
       winner = grid[i][0];
     }
   }
 
-  // Vertical
+  // checking for vertical line
   for (let i = 0; i < 3; i++) {
-    if (equals3(grid[0][i], grid[1][i], grid[2][i])) {
+    if (lineOf3(grid[0][i], grid[1][i], grid[2][i])) {
       winner = grid[0][i];
     }
   }
 
-  // Diagonal
-  if (equals3(grid[0][0], grid[1][1], grid[2][2])) {
+  // checking for diagonal line
+  if (lineOf3(grid[0][0], grid[1][1], grid[2][2])) {
     winner = grid[0][0];
   }
-  if (equals3(grid[2][0], grid[1][1], grid[0][2])) {
+  if (lineOf3(grid[2][0], grid[1][1], grid[0][2])) {
     winner = grid[2][0];
   }
+
 
   if (winner === null && space.length === 0) {
     return 'tie';
   } 
   else {
     return winner;
+  }
+}
+
+function printResults() {
+  let result = checkLineOf3();
+  if (result != null) {
+    noLoop();
+    let resultP = createP('');
+    resultP.style('font-size', '32pt');
+    if (result === 'tie') {
+      resultP.html('Tie!');
+    } 
+    else {
+      resultP.html(`${result} wins!`);
+    }
+  } 
+  // if game isn't over results aren't shown yet
+  else {
+    nextTurn();
   }
 }
 
