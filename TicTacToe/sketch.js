@@ -18,8 +18,8 @@ let cols = 3;
 let rows = 3;
 let resolution = 800/3;
 
-let players = ['X', 'O'];
-let currentPlayer;
+let players = ["X", "O"];
+let currentPlayer = players[0];
 let space = [];
 
 let x;
@@ -104,7 +104,8 @@ function singlePlayer() {
 function multiplayer() {
   if (screen === "multiplayer") {
     drawGrid();
-    drawAiO();
+    
+
    
   }
 }
@@ -152,19 +153,20 @@ function drawAiO() {
 }
 
 function drawPlayerX() {
-  for (let i = 0; i < 3; i++) {
-    for (let j = 0; j < 3; j++) {
-      textSize(32);
-      x = w * i + w / 2;
-      y = h * j + h / 2;
-      place = grid[i][j];
-      r = w / 4;
-      if (place === players[0]) {
-        line(x - r, y - r, x + r, y + r);
-        line(x + r, y - r, x - r, y + r);
-      }
-    }
-  }
+  ellipse(20,30,20);
+  // for (let i = 0; i < 3; i++) {
+  //   for (let j = 0; j < 3; j++) {
+  //     textSize(32);
+  //     x = w * i + w / 2;
+  //     y = h * j + h / 2;
+  //     place = grid[i][j];
+  //     r = w / 4;
+  //     if (place === players[0]) {
+  //       line(x - r, y - r, x + r, y + r);
+  //       line(x + r, y - r, x - r, y + r);
+  //     }
+  //   }
+  // }
 }
 
 function drawPlayerO() {
@@ -179,6 +181,22 @@ function drawPlayerO() {
         noFill();
         ellipse(x, y, r * 2);
       } 
+    }
+  }
+}
+  
+
+function mousePressed() {
+  if (screen === "multiplayer" || screen === "singlePlayer") {
+    // problem
+    if (currentPlayer === players[0]) {
+      let i = mouseX/w;
+      let j = mouseY/h;
+      if (grid[i][j] === '') {
+        grid[i][j] = ellipse(z, y, r * 2);
+        currentPlayer = players[1];
+        nextTurn();
+      }
     }
   }
 }
