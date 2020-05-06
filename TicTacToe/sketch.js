@@ -39,7 +39,7 @@ function setup() {
   grid = make2DArray(3, 3);
   w = width / 3;
   h = height / 3;
-  currentPlayer = floor(random(players.length));
+  //currentPlayer = random(players.length);
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       space.push([i, j]);
@@ -104,7 +104,7 @@ function singlePlayer() {
 function multiplayer() {
   if (screen === "multiplayer") {
     drawGrid();
-    
+    //drawPlayerX();
 
    
   }
@@ -153,20 +153,17 @@ function drawAiO() {
 }
 
 function drawPlayerX() {
-  ellipse(20,30,20);
-  // for (let i = 0; i < 3; i++) {
-  //   for (let j = 0; j < 3; j++) {
-  //     textSize(32);
-  //     x = w * i + w / 2;
-  //     y = h * j + h / 2;
-  //     place = grid[i][j];
-  //     r = w / 4;
-  //     if (place === players[0]) {
-  //       line(x - r, y - r, x + r, y + r);
-  //       line(x + r, y - r, x - r, y + r);
-  //     }
-  //   }
-  // }
+  let i = floor(mouseX/w);
+  let j = floor(mouseY/h);
+  textSize(32);
+  x = w * i + w / 2;
+  y = h * j + h / 2;
+  place = players[0]; //grid[i][j];
+  r = w / 4;
+  if (place === players[0]) {
+    line(x - r, y - r, x + r, y + r);
+    line(x + r, y - r, x - r, y + r);
+  }
 }
 
 function drawPlayerO() {
@@ -188,20 +185,18 @@ function drawPlayerO() {
 
 function mousePressed() {
   if (screen === "multiplayer" || screen === "singlePlayer") {
-    // problem
     if (currentPlayer === players[0]) {
-      let i = mouseX/w;
-      let j = mouseY/h;
-      if (grid[i][j] === '') {
-        grid[i][j] = ellipse(z, y, r * 2);
-        currentPlayer = players[1];
-        nextTurn();
-      }
+      let i = floor(mouseX/w);
+      let j = floor(mouseY/h);
+      grid[i][j] = drawPlayerX();
+      currentPlayer = players[1];
+      nextTurn();
     }
   }
 }
 
 function lineOf3(x, y, z) {
+  // checking for three of the same things
   return x === y && y === z && x != '';
 }
 
