@@ -13,7 +13,7 @@ function make2DArray(cols,rows){
   return arr;
 }
 
-let grid;
+let grid = make2DArray(3, 3);
 let cols = 3;
 let rows = 3;
 let resolution = 800/3;
@@ -36,10 +36,9 @@ function setup() {
   frameRate(1.5);
   cols = width/resolution;
   rows = height/resolution; 
-  grid = make2DArray(3, 3);
   w = width / 3;
   h = height / 3;
-  currentPlayer = floor(random(players.length));
+  currentPlayer = players[0]; //floor(random(players.length));
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       space.push([i, j]);
@@ -47,7 +46,6 @@ function setup() {
   }
 
 }
-
 
 function draw() {
   mainMenu();
@@ -97,16 +95,12 @@ function singlePlayer() {
   if (screen === "singlePlayer") {
     // text("Click a space where you want to put an 'X'.")
     drawGrid();
-
   }
 }
 
 function multiplayer() {
   if (screen === "multiplayer") {
     drawGrid();
-    
-
-   
   }
 }
 
@@ -153,50 +147,46 @@ function drawAiO() {
 }
 
 function drawPlayerX() {
-  ellipse(20,30,20);
-  // for (let i = 0; i < 3; i++) {
-  //   for (let j = 0; j < 3; j++) {
-  //     textSize(32);
-  //     x = w * i + w / 2;
-  //     y = h * j + h / 2;
-  //     place = grid[i][j];
-  //     r = w / 4;
-  //     if (place === players[0]) {
-  //       line(x - r, y - r, x + r, y + r);
-  //       line(x + r, y - r, x - r, y + r);
-  //     }
-  //   }
-  // }
+  let i = floor(mouseX/w);
+  let j = floor(mouseY/h);
+  if (grid[i][j] = players[0]) {
+    textSize(32);
+    x = w * i + w / 2;
+    y = h * j + h / 2;
+    place = players[0];
+    r = w / 4;
+    if (place === players[0]) {
+      line(x - r, y - r, x + r, y + r);
+      line(x + r, y - r, x - r, y + r);
+    }
+  }
 }
 
 function drawPlayerO() {
-  for (let i = 0; i < 3; i++) {
-    for (let j = 0; j < 3; j++) {
-      textSize(32);
-      x = w * i + w / 2;
-      y = h * j + h / 2;
-      place = grid[i][j];
-      r = w / 4;
-      if (place === players[1]) {
-        noFill();
-        ellipse(x, y, r * 2);
-      } 
-    }
-  }
+  let i = floor(mouseX/w);
+  let j = floor(mouseY/h);
+  textSize(32);
+  x = w * i + w / 2;
+  y = h * j + h / 2;
+  place = grid[i][j];
+  r = w / 4;
+  if (place === players[1]) {
+    noFill();
+    ellipse(x, y, r * 2);
+  } 
 }
   
 
 function mousePressed() {
   if (screen === "multiplayer" || screen === "singlePlayer") {
-    // problem
+    let i = mouseX/w;
+    let j = mouseY/h;
     if (currentPlayer === players[0]) {
-      let i = mouseX/w;
-      let j = mouseY/h;
-      if (grid[i][j] === '') {
-        grid[i][j] = ellipse(z, y, r * 2);
-        currentPlayer = players[1];
-        nextTurn();
-      }
+      grid[i][j] = players[0];
+      currentPlayer = players[1];
+    }
+    if (currentPlayer === players[1]) {
+      grid[i][j] = drawPlayerO();
     }
   }
 }
