@@ -146,26 +146,9 @@ function drawAiO() {
   }
 }
 
-function drawPlayerX() {
-  let i = floor(mouseX/w);
-  let j = floor(mouseY/h);
-  if (grid[i][j] = players[0]) {
-    textSize(32);
-    x = w * i + w / 2;
-    y = h * j + h / 2;
-    place = players[0];
-    r = w / 4;
-    if (place === players[0]) {
-      line(x - r, y - r, x + r, y + r);
-      line(x + r, y - r, x - r, y + r);
-    }
-  }
-}
-
 function drawPlayerO() {
   let i = floor(mouseX/w);
   let j = floor(mouseY/h);
-  textSize(32);
   x = w * i + w / 2;
   y = h * j + h / 2;
   place = grid[i][j];
@@ -175,14 +158,24 @@ function drawPlayerO() {
     ellipse(x, y, r * 2);
   } 
 }
-  
+
+function drawPlayerX() {
+  let i = floor(mouseX/w);
+  let j = floor(mouseY/h);
+  x = w * i + w / 2;
+  y = h * j + h / 2;
+  //place = grid[i][j];
+  r = w / 4;
+  line(x - r, y - r, x + r, y + r);
+  line(x + r, y - r, x - r, y + r);
+}
 
 function mousePressed() {
   if (screen === "multiplayer" || screen === "singlePlayer") {
-    let i = mouseX/w;
-    let j = mouseY/h;
+    let i = floor(mouseX/w);
+    let j = floor(mouseY/h);
     if (currentPlayer === players[0]) {
-      grid[i][j] = players[0];
+      grid[i][j] = drawPlayerX();;
       currentPlayer = players[1];
     }
     if (currentPlayer === players[1]) {
