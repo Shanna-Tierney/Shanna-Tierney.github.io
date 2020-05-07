@@ -105,7 +105,6 @@ function multiplayer() {
   if (screen === "multiplayer") {
     drawGrid();
     //drawPlayerX();
-    drawAiO();
 
    
   }
@@ -157,16 +156,14 @@ function drawPlayerX() {
   let i = floor(mouseX/w);
   let j = floor(mouseY/h);
   textSize(32);
-  place = grid[i][j];
   x = w * i + w / 2;
   y = h * j + h / 2;
-  
-  console.log(place);
+  place = players[0]; //grid[i][j];
   r = w / 4;
-  
-  line(x - r, y - r, x + r, y + r);
-  line(x + r, y - r, x - r, y + r);
-  
+  if (place === players[0]) {
+    line(x - r, y - r, x + r, y + r);
+    line(x + r, y - r, x - r, y + r);
+  }
 }
 
 function drawPlayerO() {
