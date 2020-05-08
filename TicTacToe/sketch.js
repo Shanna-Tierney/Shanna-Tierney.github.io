@@ -101,6 +101,14 @@ function singlePlayer() {
 function multiplayer() {
   if (screen === "multiplayer") {
     drawGrid();
+    let i = floor(mouseX/w);
+    let j = floor(mouseX/h);
+    if (grid[i][j] === "X") {
+      drawPlayerX();
+    }
+    if (grid[i][j] === "O") {
+      drawPlayerO();
+    }
   }
 }
 
@@ -153,10 +161,8 @@ function drawPlayerO() {
   y = h * j + h / 2;
   place = grid[i][j];
   r = w / 4;
-  if (place === players[1]) {
-    noFill();
-    ellipse(x, y, r * 2);
-  } 
+  noFill();
+  ellipse(x, y, r * 2);
 }
 
 function drawPlayerX() {
@@ -175,11 +181,11 @@ function mousePressed() {
     let i = floor(mouseX/w);
     let j = floor(mouseY/h);
     if (currentPlayer === players[0]) {
-      grid[i][j] = drawPlayerX();;
+      grid[i][j] = "X";
       currentPlayer = players[1];
     }
     if (currentPlayer === players[1]) {
-      grid[i][j] = drawPlayerO();
+      grid[i][j] = "O";
     }
   }
 }
