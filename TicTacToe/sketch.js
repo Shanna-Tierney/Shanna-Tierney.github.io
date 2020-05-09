@@ -19,12 +19,12 @@ let rows = 3;
 let resolution = 800/3;
 
 let players = ["X", "O"];
-let currentPlayer = players[0];
+let currentPlayer;
 let space = [];
+let spaceLeft = 9;
 
 let x;
 let y;
-let place;
 let r;
 let w;
 let h;
@@ -38,7 +38,7 @@ function setup() {
   rows = height/resolution; 
   w = width / 3;
   h = height / 3;
-  currentPlayer = players[0]; //floor(random(players.length));
+  currentPlayer = floor(random(players.length));
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       space.push([i, j]);
@@ -101,13 +101,15 @@ function singlePlayer() {
 function multiplayer() {
   if (screen === "multiplayer") {
     drawGrid();
-    let i = floor(mouseX/w);
-    let j = floor(mouseX/h);
-    if (grid[i][j] === "X") {
-      drawPlayerX();
-    }
-    if (grid[i][j] === "O") {
-      drawPlayerO();
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (grid[i][j] === players[0]) {
+          drawAiX();
+        }
+        if (grid[i][j] === players[1]) {
+          drawAiO();
+        }
+      }
     }
   }
 }
@@ -125,10 +127,9 @@ function aiMode() {
 function drawAiX() {
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
-      textSize(32);
       x = w * i + w / 2;
       y = h * j + h / 2;
-      place = grid[i][j];
+      let place = grid[i][j];
       r = w / 4;
       if (place === players[0]) {
         line(x - r, y - r, x + r, y + r);
@@ -141,10 +142,9 @@ function drawAiX() {
 function drawAiO() {
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
-      textSize(32);
       x = w * i + w / 2;
       y = h * j + h / 2;
-      place = grid[i][j];
+      let place = grid[i][j];
       r = w / 4;
       if (place === players[1]) {
         noFill();
@@ -154,39 +154,17 @@ function drawAiO() {
   }
 }
 
-function drawPlayerO() {
-  let i = floor(mouseX/w);
-  let j = floor(mouseY/h);
-  x = w * i + w / 2;
-  y = h * j + h / 2;
-  place = grid[i][j];
-  r = w / 4;
-  noFill();
-  ellipse(x, y, r * 2);
-}
-
-function drawPlayerX() {
-  let i = floor(mouseX/w);
-  let j = floor(mouseY/h);
-  x = w * i + w / 2;
-  y = h * j + h / 2;
-  //place = grid[i][j];
-  r = w / 4;
-  line(x - r, y - r, x + r, y + r);
-  line(x + r, y - r, x - r, y + r);
-}
-
 function mousePressed() {
   if (screen === "multiplayer" || screen === "singlePlayer") {
     let i = floor(mouseX/w);
     let j = floor(mouseY/h);
-    if (currentPlayer === players[0]) {
-      grid[i][j] = "X";
-      currentPlayer = players[1];
+    if (currentPlayer === 0) {
+      grid[i][j] = players[0];
     }
-    if (currentPlayer === players[1]) {
-      grid[i][j] = "O";
+    if (currentPlayer === 1) {
+      grid[i][j] = players[1];
     }
+    printResults();
   }
 }
 
@@ -220,8 +198,8 @@ function checkLineOf3() {
   }
 
 
-  if (winner === null && space.length === 0) {
-    return 'tie';
+  if (winner === null && spaceLeft <= 1 || winner === null && space.length === 0) {
+    return "draw";
   } 
   else {
     return winner;
@@ -232,10 +210,10 @@ function printResults() {
   let result = checkLineOf3();
   if (result != null) {
     noLoop();
-    let resultP = createP('');
-    resultP.style('font-size', '32pt');
-    if (result === 'tie') {
-      resultP.html('Tie!');
+    let resultP = createP("");
+    resultP.style("font-size", "32pt");
+    if (result === "draw") {
+      resultP.html("Draw!");
     } 
     else {
       resultP.html(`${result} wins!`);
@@ -243,13 +221,20 @@ function printResults() {
   } 
   // if game isn't over results aren't shown yet
   else {
-    nextTurn();
+    if (screen === "aiMode") {
+      nextTurn();
+    }
+    else {
+      currentPlayer = (currentPlayer + 1) % players.length;
+      spaceLeft --;
+      console.log(spaceLeft);
+    }
   }
 }
 
 function nextTurn() {
-  let spaceLeft = random(space.length);
-  let place = space.splice(spaceLeft, 1)[0];
+  let index = floor(random(space.length));
+  let place = space.splice(index, 1)[0];
   let i = place[0];
   let j = place[1];
   grid[i][j] = players[currentPlayer];
