@@ -16,7 +16,7 @@ function make2DArray(cols,rows){
 let grid = make2DArray(3, 3);
 let cols = 3;
 let rows = 3;
-let resolution = 800/3;
+let resolution = 650/3;
 
 let players = ["X", "O"];
 let currentPlayer;
@@ -32,7 +32,8 @@ let h;
 let screen = "mainMenu";
 
 function setup() {
-  createCanvas(800, 800);
+  canvas = createCanvas(650, 650);
+  canvas.center();
   frameRate(1.5);
   cols = width/resolution;
   rows = height/resolution; 
@@ -127,8 +128,8 @@ function multiplayer() {
 function aiMode() {
   if (screen === "aiMode") {
     drawGrid();
-    drawAiO();
-    drawAiX();
+    drawO();
+    drawX();
     printResults();
   }
 }
@@ -183,10 +184,9 @@ function mousePressed() {
       printResults();
     }
     if (currentPlayer === 1) {
-      printResults();
       drawO;
+      printResults();
     }
-    
   }
 }
 
@@ -233,7 +233,7 @@ function printResults() {
   if (result != null) {
     noLoop();
     let resultP = createP("");
-    resultP.style("font-size", "32pt");
+    resultP.style("font-size", "25pt");
     if (result === "draw") {
       resultP.html("Draw!");
     } 
@@ -243,14 +243,13 @@ function printResults() {
   } 
   // if game isn't over results aren't shown yet
   else {
-    // if player is an ai they use the nextTurn() function
+    // if player is an ai they use the nextTurn() function to pick their place
     if (screen === "aiMode" || screen === "singlePlayer" && currentPlayer === 1) {
       nextTurn();
     }
     else {
       currentPlayer = (currentPlayer + 1) % players.length;
       spaceLeft --;
-      console.log(spaceLeft);
     }
   }
 }
