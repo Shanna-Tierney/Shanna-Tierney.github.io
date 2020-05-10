@@ -79,7 +79,7 @@ function keyPressed() {
 function drawGrid() {
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
-      // setting grid sizes
+      // setting box sizes
       let x = i * resolution;
       let y = j * resolution;
       // drawing grid
@@ -95,6 +95,16 @@ function singlePlayer() {
   if (screen === "singlePlayer") {
     // text("Click a space where you want to put an 'X'.")
     drawGrid();
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (grid[i][j] === players[0]) {
+          drawX();
+        }
+        if (grid[i][j] === players[1]) {
+          drawO();
+        }
+      }
+    }
   }
 }
 
@@ -104,10 +114,10 @@ function multiplayer() {
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         if (grid[i][j] === players[0]) {
-          drawAiX();
+          drawX();
         }
         if (grid[i][j] === players[1]) {
-          drawAiO();
+          drawO();
         }
       }
     }
@@ -123,8 +133,7 @@ function aiMode() {
   }
 }
 
-
-function drawAiX() {
+function drawX() {
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       x = w * i + w / 2;
@@ -139,7 +148,7 @@ function drawAiX() {
   }
 }
 
-function drawAiO() {
+function drawO() {
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       x = w * i + w / 2;
@@ -155,7 +164,7 @@ function drawAiO() {
 }
 
 function mousePressed() {
-  if (screen === "multiplayer" || screen === "singlePlayer") {
+  if (screen === "multiplayer") {
     let i = floor(mouseX/w);
     let j = floor(mouseY/h);
     if (currentPlayer === 0) {
@@ -165,6 +174,19 @@ function mousePressed() {
       grid[i][j] = players[1];
     }
     printResults();
+  }
+  if (screen === "singlePlayer") {
+    if (currentPlayer === 0) {
+      let i = floor(mouseX/w);
+      let j = floor(mouseY/h);
+      grid[i][j] = players[0];
+      printResults();
+    }
+    if (currentPlayer === 1) {
+      printResults();
+      drawO;
+    }
+    
   }
 }
 
@@ -221,7 +243,8 @@ function printResults() {
   } 
   // if game isn't over results aren't shown yet
   else {
-    if (screen === "aiMode") {
+    // if player is an ai they use the nextTurn() function
+    if (screen === "aiMode" || screen === "singlePlayer" && currentPlayer === 1) {
       nextTurn();
     }
     else {
