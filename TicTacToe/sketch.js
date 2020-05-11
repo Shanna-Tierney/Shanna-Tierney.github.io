@@ -174,21 +174,21 @@ function lineOf3(x, y, z) {
 function checkLineOf3() {
   let winner = null;
 
-  // checking for horizontal line
+  // horizontal
   for (let i = 0; i < 3; i++) {
     if (lineOf3(grid[i][0], grid[i][1], grid[i][2])) {
       winner = grid[i][0];
     }
   }
 
-  // checking for vertical line
+  // Vertical
   for (let i = 0; i < 3; i++) {
     if (lineOf3(grid[0][i], grid[1][i], grid[2][i])) {
       winner = grid[0][i];
     }
   }
 
-  // checking for diagonal line
+  // Diagonal
   if (lineOf3(grid[0][0], grid[1][1], grid[2][2])) {
     winner = grid[0][0];
   }
@@ -196,10 +196,9 @@ function checkLineOf3() {
     winner = grid[2][0];
   }
 
-  if (winner === null && space.length === 0) {
-    return "draw";
-  } 
-  else {
+  if (winner === null && space.length === 0 || winner === null && spaceLeft === 0 ) {
+    return 'draw';
+  } else {
     return winner;
   }
 }
@@ -227,7 +226,7 @@ function printResults() {
       // swiches current player, removes a space on the grid and prints who's turn
       currentPlayer = (currentPlayer + 1) % players.length;
       spaceLeft --;
-      whosTurn();
+      //whosTurn();
     }
   }
 }
