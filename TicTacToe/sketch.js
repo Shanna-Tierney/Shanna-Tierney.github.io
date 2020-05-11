@@ -16,7 +16,7 @@ function make2DArray(cols,rows){
 let grid = make2DArray(3, 3);
 let cols = 3;
 let rows = 3;
-let resolution = 650/3;
+let resolution = 800/3;
 
 let players = ["X", "O"];
 let currentPlayer;
@@ -32,7 +32,7 @@ let h;
 let screen = "mainMenu";
 
 function setup() {
-  canvas = createCanvas(650, 650);
+  canvas = createCanvas(800, 800);
   canvas.center();
   frameRate(1.5);
   cols = width/resolution;
@@ -50,28 +50,22 @@ function setup() {
 
 function draw() {
   mainMenu();
-  singlePlayer();
   multiplayer();
   aiMode();
 }
 
 function mainMenu() {
   if (screen === "mainMenu") {
-    background(100, 150, 200);
-    text("Welcome to a game of Tic Tac Toe!", width/3, height/3);
-    text("Press 1 for single player, 2 for multiplayer or 3 to watch the computer play against itself.", width/4, height/2);
+    background(173, 216, 230);
   }
 }
 
 function keyPressed() {
   if (screen === "mainMenu") {
     if (key === "1") {
-      screen = "singlePlayer";
-    }
-    if (key === "2") {
       screen = "multiplayer";
     }
-    if (key === "3") {
+    if (key === "2") {
       screen = "aiMode";
     }
   }
@@ -88,23 +82,6 @@ function drawGrid() {
       stroke(0);
       strokeWeight(5);
       rect(x - 5, y - 5,resolution + 10,resolution + 10);
-    }
-  }
-}
-
-function singlePlayer() {
-  if (screen === "singlePlayer") {
-    // text("Click a space where you want to put an 'X'.")
-    drawGrid();
-    for (let i = 0; i < 3; i++) {
-      for (let j = 0; j < 3; j++) {
-        if (grid[i][j] === players[0]) {
-          drawX();
-        }
-        if (grid[i][j] === players[1]) {
-          drawO();
-        }
-      }
     }
   }
 }
@@ -164,6 +141,18 @@ function drawO() {
   }
 }
 
+function whosTurn() {
+  let turnP = createP("");
+  turnP.style("font-size", "55pt");
+  if (currentPlayer === 0) {
+    turnP.html("X's Turn.");
+  }
+  else {
+    turnP.html("O's Turn.");
+  }
+  turnP.html("");
+}
+
 function mousePressed() {
   if (screen === "multiplayer") {
     let i = floor(mouseX/w);
@@ -175,18 +164,6 @@ function mousePressed() {
       grid[i][j] = players[1];
     }
     printResults();
-  }
-  if (screen === "singlePlayer") {
-    if (currentPlayer === 0) {
-      let i = floor(mouseX/w);
-      let j = floor(mouseY/h);
-      grid[i][j] = players[0];
-      printResults();
-    }
-    if (currentPlayer === 1) {
-      drawO;
-      printResults();
-    }
   }
 }
 
@@ -219,8 +196,7 @@ function checkLineOf3() {
     winner = grid[2][0];
   }
 
-
-  if (winner === null && spaceLeft <= 1 || winner === null && space.length === 0) {
+  if (winner === null && space.length === 0) {
     return "draw";
   } 
   else {
@@ -233,7 +209,7 @@ function printResults() {
   if (result != null) {
     noLoop();
     let resultP = createP("");
-    resultP.style("font-size", "25pt");
+    resultP.style("font-size", "55pt");
     if (result === "draw") {
       resultP.html("Draw!");
     } 
@@ -244,12 +220,14 @@ function printResults() {
   // if game isn't over results aren't shown yet
   else {
     // if player is an ai they use the nextTurn() function to pick their place
-    if (screen === "aiMode" || screen === "singlePlayer" && currentPlayer === 1) {
+    if (screen === "aiMode") {
       nextTurn();
     }
     else {
+      // swiches current player, removes a space on the grid and prints who's turn
       currentPlayer = (currentPlayer + 1) % players.length;
       spaceLeft --;
+      whosTurn();
     }
   }
 }
