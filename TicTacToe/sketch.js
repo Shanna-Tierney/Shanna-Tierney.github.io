@@ -141,18 +141,6 @@ function drawO() {
   }
 }
 
-function whosTurn() {
-  let turnP = createP("");
-  turnP.style("font-size", "55pt");
-  if (currentPlayer === 0) {
-    turnP.html("X's Turn.");
-  }
-  else {
-    turnP.html("O's Turn.");
-  }
-  turnP.html("");
-}
-
 function mousePressed() {
   if (screen === "multiplayer") {
     let i = floor(mouseX/w);
@@ -163,8 +151,8 @@ function mousePressed() {
     if (currentPlayer === 1) {
       grid[i][j] = players[1];
     }
-    printResults();
   }
+  printResults();
 }
 
 function lineOf3(x, y, z) {
@@ -174,21 +162,21 @@ function lineOf3(x, y, z) {
 function checkLineOf3() {
   let winner = null;
 
-  // horizontal
+  // checks horizontal
   for (let i = 0; i < 3; i++) {
     if (lineOf3(grid[i][0], grid[i][1], grid[i][2])) {
       winner = grid[i][0];
     }
   }
 
-  // Vertical
+  // checks ertical
   for (let i = 0; i < 3; i++) {
     if (lineOf3(grid[0][i], grid[1][i], grid[2][i])) {
       winner = grid[0][i];
     }
   }
 
-  // Diagonal
+  // checksiagonal
   if (lineOf3(grid[0][0], grid[1][1], grid[2][2])) {
     winner = grid[0][0];
   }
@@ -198,7 +186,8 @@ function checkLineOf3() {
 
   if (winner === null && space.length === 0 || winner === null && spaceLeft === 0 ) {
     return 'draw';
-  } else {
+  } 
+  else {
     return winner;
   }
 }
@@ -226,7 +215,7 @@ function printResults() {
       // swiches current player, removes a space on the grid and prints who's turn
       currentPlayer = (currentPlayer + 1) % players.length;
       spaceLeft --;
-      //whosTurn();
+      whosTurn();
     }
   }
 }
@@ -238,4 +227,15 @@ function nextTurn() {
   let j = place[1];
   grid[i][j] = players[currentPlayer];
   currentPlayer = (currentPlayer + 1) % players.length;
+}
+
+function whosTurn() {
+  let turnP = createP("");
+  turnP.style("font-size", "55pt");
+  if (currentPlayer === 0) {
+    turnP.html("X's Turn.");
+  }
+  else {
+    turnP.html("O's Turn.");
+  }
 }
