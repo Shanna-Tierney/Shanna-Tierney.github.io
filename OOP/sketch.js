@@ -9,16 +9,14 @@ let fireworks = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  for (let i = 0; i < 100; i++) {
-    let x = random(width);
-    let y = random(height);
-    let radius = random(10, 50);
-    fireworks[i] = new Firework(x, y, radius);
-  }
 }
 
 function draw() {
-  background(220);
+  background(0);
+  for (let f of fireworks) {
+    f.move();
+    f.show();
+  }
 }
 
 class Firework {
@@ -40,20 +38,23 @@ class Firework {
     this.a -= 2;
   }
 
-  move() {
+  show() {
     this.x += this.dx;
     this.y += this.dy;
-    this.dy += .1;
+    this.dy += .5;
   }
   
 }
 
-function explode() {
-    for () {
-
-    }
-}
-
 function mousePressed() {
-  explode();
+  let r = random(0, 255);
+  let g = random(0, 255);
+  let b = random(0, 255);
+  for (let i = 0; i < 100; i++) {
+    let radius = random(10, 50);
+    let dx = 5;
+    let dy = 5;
+    let a = 255;
+    fireworks[i] = new Firework(mouseX, mouseY, radius, dx, dy, r, g, b, a);
+  }
 }
