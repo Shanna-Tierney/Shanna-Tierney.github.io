@@ -3,17 +3,18 @@
 // Date
 //
 // Extra for Experts:
-// - added gravity, made defult values for Firework constructor
+// - added gravity, made defult values for constructors
 
 let fireworks = [];
+let birds = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-
+  window.setInterval(makeBirds, 2000);
 }
 
 function draw() {
-  background(20);
+  background(0);
   for (let firework of fireworks){
     firework.show();
     firework.explode();
@@ -21,6 +22,11 @@ function draw() {
     if (firework.a <= 0){
       fireworks.splice(firework, 1);
     }
+  }
+  for (let bird of birds) {
+    bird.display();
+    bird.isAlive();
+    bird.update();
   }
 }
 
@@ -54,7 +60,47 @@ class Firework {
   }
 }
 
-function mouseClicked(){   
+class Bird {
+  constructor(x, y, dx = 3, dy = 2, w = 50, h = 20, color = "white") {
+    this.x = x;
+    this.y = y;
+    this.dx = dx;
+    this.dy = dy;
+    this.w = w;
+    this.h = h;
+    this.color = color;
+  }
+
+  display() {
+    noStroke();
+    fill(this.color);
+    rect(this.x, this.y, this.w, this.h);
+  }
+
+  isAlive() {
+    this.x += this.dx;
+    if (this.x < windowWidth/6 || this.x > windowWidth/4 || this.x > windowWidth/2 ) {
+      this.y += this.dy;
+    }
+    if (this.x > windowWidth/6 && this.x < windowWidth/4 || this.x > windowWidth/4 && this.x < windowWidth/2) {
+      this.y -= this.dy;
+    }
+  }
+
+  update() {
+    if (this.x > windowWidth) {
+      birds.splice(this, 1);
+    }
+  }
+}
+
+function makeBirds() {
+  let y = random(windowHeight);
+  let bird = new Bird(0, y);
+  birds.push(bird);
+}
+
+function mousePressed(){   
   for (let i = 0; i < 100; i++){
     let speed = random(1, 3);
     let angle = i * 3;
