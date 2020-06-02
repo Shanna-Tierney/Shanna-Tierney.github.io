@@ -22,6 +22,9 @@ function draw() {
     if (firework.a <= 0){
       fireworks.splice(firework, 1);
     }
+    for (let bird of birds) {
+      firework.checkCollision(bird);
+    }
   }
   for (let bird of birds) {
     bird.display();
@@ -58,6 +61,13 @@ class Firework {
       this.dy += .15;
     }
   }
+
+  checkCollision(bird) {
+    if (collideRectCircle(bird.x, bird.y, bird.w, bird.h, this.x, this.y, (this.radius) * 2)) {
+      bird.dx *= -1;
+      bird.color = "blue";
+    }
+  }
 }
 
 class Bird {
@@ -79,12 +89,12 @@ class Bird {
 
   isAlive() {
     this.x += this.dx;
-    if (this.x < windowWidth/6 || this.x > windowWidth/4 || this.x > windowWidth/2 ) {
-      this.y += this.dy;
-    }
-    if (this.x > windowWidth/6 && this.x < windowWidth/4 || this.x > windowWidth/4 && this.x < windowWidth/2) {
-      this.y -= this.dy;
-    }
+    // if (birds % 2 === 0) {
+    //   this.y += this.dy;
+    // }
+    // else{
+    //   this.y -= this.dy;
+    // }
   }
 
   update() {
@@ -104,8 +114,8 @@ function mousePressed(){
   for (let i = 0; i < 100; i++){
     let speed = random(1, 3);
     let angle = i * 3;
-    let dx = speed * cos(angle);
-    let dy = speed * sin(angle);
+    let dx = speed * sin(angle);
+    let dy = speed * cos(angle);
     let firework = new Firework(mouseX, mouseY, 5, dx, dy);
     fireworks.push(firework);
   }
