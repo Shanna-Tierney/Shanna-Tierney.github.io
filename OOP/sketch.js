@@ -1,9 +1,9 @@
 // OOP Assignment
 // Shanna Tierney
-// Date
+// June 3, 2020
 //
 // Extra for Experts:
-// - added gravity, made defult values for constructors
+// - added gravity, made defult values for constructors, made fireworks appear in circular form and made birds fly at different heights based on x location
 
 let fireworks = [];
 let birds = [];
@@ -88,16 +88,19 @@ class Bird {
   }
 
   isAlive() {
+    // moving bird
     this.x += this.dx;
-    // if (birds % 2 === 0) {
-    //   this.y += this.dy;
-    // }
-    // else{
-    //   this.y -= this.dy;
-    // }
+    // makign birds change the direction they fly
+    if (this.x >= 300 && this.x <= 600 || this.x >= 900 && this.x <= 1200 || this.x >= 1500) {
+      this.y += this.dy;
+    }
+    else{
+      this.y -= this.dy;
+    }
   }
 
   update() {
+    // removing bird from the array
     if (this.x > windowWidth) {
       birds.splice(this, 1);
     }
@@ -105,13 +108,16 @@ class Bird {
 }
 
 function makeBirds() {
+  // making birds every 2 seconds
   let y = random(windowHeight);
   let bird = new Bird(0, y);
   birds.push(bird);
 }
 
-function mousePressed(){   
+function mousePressed(){
+  // making 100 firework balls every time mouse is pressed
   for (let i = 0; i < 100; i++){
+    // speed, angle, cos and sin used to make circular fireworks
     let speed = random(1, 3);
     let angle = i * 3;
     let dx = speed * sin(angle);
